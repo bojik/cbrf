@@ -8,7 +8,9 @@ use DateTime;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 final class ParseCbrfCommand extends Command
@@ -32,7 +34,8 @@ final class ParseCbrfCommand extends Command
 
     protected function configure()
     {
-        $this->addArgument('date', null, 'Date for parsing', '-1 day');
+        $this->setDescription('Parses quotes from cbrf')
+            ->addOption('date', null, InputOption::VALUE_OPTIONAL, 'Date for parsing', '-1 day');
     }
 
     /**
@@ -44,7 +47,7 @@ final class ParseCbrfCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $date = new DateTime($input->getArgument('date'));
+        $date = new DateTime($input->getOption('date'));
         $output->writeln($this->parser->parse($date));
 
         return 0;
